@@ -6,9 +6,19 @@ import threading
 import signal
 import sys
 
-# Configure logging with a friendly time format
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%H:%M:%S', flush=True)
+# Custom logging handler that flushes immediately
+class ImmediateFlushHandler(logging.StreamHandler):
+    def emit(self, record):
+        super().emit(record)
+        self.flush()
+
+# Set up logging with custom handler
 logger = logging.getLogger(__name__)
+handler = ImmediateFlushHandler()
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', '%H:%M:%S')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+logger.setLevel(logging.INFO)
 
 app = Flask(__name__)
 
