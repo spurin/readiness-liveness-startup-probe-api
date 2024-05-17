@@ -32,4 +32,4 @@ This repository contains a Python Flask application designed to demonstrate the 
 
 ## Container Image
 
-Available as a multi-arch container via Docker Hub at spurin/readiness-liveness-startup-probe-api
+Available as a multi-arch container via Docker Hub at [spurin/readiness-liveness-startup-probe-api](https://hub.docker.com/r/spurin/readiness-liveness-startup-probe-api)
