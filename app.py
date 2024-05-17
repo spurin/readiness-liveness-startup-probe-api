@@ -59,6 +59,11 @@ consecutive_failures = {
     'ready': 0,
     'healthz': 0
 }
+consecutive_success = {
+    'startup': 0,
+    'ready': 0,
+    'healthz': 0
+}
 permanent_failure_activated = {
     'startup': False,
     'ready': False,
@@ -88,7 +93,8 @@ def probe_handler(endpoint):
 
     if not flags[endpoint]:
         consecutive_failures[endpoint] += 1
-        log_msg = f"{endpoint.capitalize()} probe failed: request_count:{call_counts[endpoint]}, consecutive_failures:{consecutive_failures[endpoint]}"
+        consecutive_success[endpoint] = 0
+        log_msg = f"{endpoint.capitalize()} probe failed: request_count:{call_counts[endpoint]}, consecutive_success:{consecutive_success[endpoint]}, consecutive_failures:{consecutive_failures[endpoint]}"
         logger.info(log_msg)
         return "Error", 500
 
@@ -97,18 +103,21 @@ def probe_handler(endpoint):
 
     if permanent_failure_activated[endpoint]:
         consecutive_failures[endpoint] += 1
-        log_msg = f"{endpoint.capitalize()} probe failed permanently after reaching threshold of {failure_threshold} calls: request_count:{call_counts[endpoint]}, consecutive_failures:{consecutive_failures[endpoint]}"
+        consecutive_success[endpoint] = 0
+        log_msg = f"{endpoint.capitalize()} probe failed permanently after reaching threshold of {failure_threshold} calls: request_count:{call_counts[endpoint]}, consecutive_success:{consecutive_success[endpoint]}, consecutive_failures:{consecutive_failures[endpoint]}"
         logger.info(log_msg)
         return "Error", 500
 
     if chaos_frequency > 0 and call_counts[endpoint] % chaos_frequency == 0:
         consecutive_failures[endpoint] += 1
-        log_msg = f"{endpoint.capitalize()} probe failed as per chaos frequency {chaos_frequency}: request_count:{call_counts[endpoint]}, consecutive_failures:{consecutive_failures[endpoint]}"
+        consecutive_success[endpoint] = 0
+        log_msg = f"{endpoint.capitalize()} probe failed as per chaos frequency {chaos_frequency}: request_count:{call_counts[endpoint]}, consecutive_success:{consecutive_success[endpoint]}, consecutive_failures:{consecutive_failures[endpoint]}"
         logger.info(log_msg)
         return "Error", 500
 
     consecutive_failures[endpoint] = 0
-    log_msg = f"{endpoint.capitalize()} probe successful: request_count:{call_counts[endpoint]}, consecutive_failures:{consecutive_failures[endpoint]}"
+    consecutive_success[endpoint] += 1
+    log_msg = f"{endpoint.capitalize()} probe successful: request_count:{call_counts[endpoint]}, consecutive_success:{consecutive_success[endpoint]}, consecutive_failures:{consecutive_failures[endpoint]}"
     logger.info(log_msg)
     return "OK", 200
 
