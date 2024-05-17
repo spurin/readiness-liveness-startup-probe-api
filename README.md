@@ -2,13 +2,13 @@
 
 ## Overview
 
-This repository contains a Python Flask application designed to demonstrate the use of Kubernetes probes: Startup, Liveness, and Readiness. The application introduces a delay to simulate startup operations, includes an optional chaos injection for testing the liveness probe, and uses a readiness file to indicate when the application is ready to receive traffic.
+This repository contains a Python Flask application designed to demonstrate the use of Kubernetes probes: Startup, Liveness, and Readiness. For each probe, the application supports delays, chaos injection and permanent failure.
 
 ## Endpoints
 
 ### `/startup`
 
-- **Description**: Simulates the initial startup phase of a service. It can be configured to delay its success response to mimic slow initialization.
+- **Description**: Simulates the initial startup phase, useful for startup probe testing.
 - **Parameters**:
   - `STARTUP_DELAY`: Time in seconds to delay the startup response (default: `0`). A value of `0` means no intentional delay.
   - `STARTUP_CHAOS_FREQUENCY`: Number of calls after which a failure is simulated (default: `0`). A value of `0` means the chaos feature is disabled.
@@ -24,7 +24,7 @@ This repository contains a Python Flask application designed to demonstrate the 
 
 ### `/healthz`
 
-- **Description**: Acts as a health check probe to monitor the ongoing status of the service.
+- **Description**: Acts as a health check probe to monitor the ongoing status of the application.
 - **Parameters**:
   - `HEALTHZ_DELAY`: Time in seconds to delay the health check response (default: `0`). A value of `0` means no intentional delay.
   - `HEALTHZ_CHAOS_FREQUENCY`: Number of calls after which a failure is simulated (default: `0`). A value of `0` means the chaos feature is disabled.
