@@ -6,7 +6,7 @@ This repository contains a Python Flask application designed to demonstrate the 
 
 Endpoints can be accessed via http or via files (for example, cat /healthz). Successful operations result in OK, failures will return ERROR.
 
-Request information and status provided as logs in the running container, allowing you to see the probe being actioned from the container view.
+Request information and status provided as logs in the running container, allowing you to see the probes being actioned from the container view.
 
 ## Env Parameters
 
