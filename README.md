@@ -2,7 +2,9 @@
 
 ## Overview
 
-This repository contains a Python Flask application designed to demonstrate the use of Kubernetes probes: Startup, Liveness, and Readiness. For each probe, the application supports delays, chaos injection and permanent failure. Endpoints can be accessed via http or via files (for example, cat /status/healthz). Successful operations result in OK, failures in ERROR. Request information and status provided as logs in the running container.
+This repository contains a Python Flask application designed to demonstrate the use of Kubernetes probes: Startup, Liveness, and Readiness. For each probe, the application supports delays, chaos injection and permanent failure.
+
+Endpoints can be accessed via http or via files (for example, cat /status/healthz). Successful operations result in OK, failures will return ERROR. Request information and status provided as logs in the running container.
 
 ## Env Parameters
 
