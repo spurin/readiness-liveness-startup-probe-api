@@ -4,7 +4,9 @@
 
 This repository contains a Python Flask application designed to demonstrate the use of Kubernetes probes: Startup, Liveness, and Readiness. For each probe, the application supports delays, chaos injection and permanent failure.
 
-Endpoints can be accessed via http or via files (for example, cat /status/healthz). Successful operations result in OK, failures will return ERROR. Request information and status provided as logs in the running container.
+Endpoints can be accessed via http or via files (for example, cat /healthz). Successful operations result in OK, failures will return ERROR.
+
+Request information and status provided as logs in the running container, allowing you to see the probe being actioned from the container view.
 
 ## Env Parameters
 
@@ -12,7 +14,7 @@ Endpoints can be accessed via http or via files (for example, cat /status/health
 
 ## Endpoints & Parameters
 
-### http:`/startup` file:`/status/startup`
+### http:`/startup` file:`/startup`
 
 - **Description**: Simulates the initial startup phase, useful for startup probe testing.
 - **Env Parameters**:
@@ -20,7 +22,7 @@ Endpoints can be accessed via http or via files (for example, cat /status/health
   - `STARTUP_CHAOS_FREQUENCY`: Number of calls after which a failure is simulated (default: `0`). A value of `0` means the chaos feature is disabled.
   - `STARTUP_PERMANENT_FAILURE_THRESHOLD`: Number of calls after which permanent failure is activated (default: `0`). A value of `0` means this feature is disabled.
 
-### http:`/ready` file:`/status/ready`
+### http:`/ready` file:`/ready`
 
 - **Description**: Represents a readiness probe that checks whether the service is ready to handle traffic.
 - **Env Parameters**:
@@ -28,7 +30,7 @@ Endpoints can be accessed via http or via files (for example, cat /status/health
   - `READY_CHAOS_FREQUENCY`: Number of calls after which a failure is simulated (default: `0`). A value of `0` means the chaos feature is disabled.
   - `READY_PERMANENT_FAILURE_THRESHOLD`: Number of calls after which permanent failure is activated (default: `0`). A value of `0` means this feature is disabled.
 
-### http:`/healthz` file:`/status/healthz`
+### http:`/healthz` file:`/healthz`
 
 - **Description**: Acts as a health check probe to monitor the ongoing status of the application.
 - **Env Parameters**:
@@ -59,7 +61,7 @@ livenessProbe:
      command:
      - /bin/sh
      - -c
-     - 'grep -q "OK" /status/healthz'
+     - 'grep -q "OK" /healthz'
   periodSeconds: 5
   timeoutSeconds: 1
   initialDelaySeconds: 10

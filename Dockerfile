@@ -5,9 +5,8 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Create a directory for our app and file endpoints
+# Create a directory for our app
 WORKDIR /app
-RUN mkdir /status
 
 # Copy the application script and the startup script to the container
 COPY app.py startup.sh /app/

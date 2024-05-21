@@ -1,11 +1,9 @@
 #!/bin/bash
-# Create /status if it doesn't exist
-mkdir -p /status
 
 # Pipe Holders
-STARTUP_PIPE=/status/startup
-READY_PIPE=/status/ready
-HEALTHZ_PIPE=/status/healthz
+STARTUP_PIPE=/startup
+READY_PIPE=/ready
+HEALTHZ_PIPE=/healthz
 
 # Create named pipes
 mkfifo $STARTUP_PIPE 2>/dev/null
