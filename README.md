@@ -12,7 +12,7 @@ Request information and status provided as logs in the running container, allowi
 
 - `PORT`: Port on which the Flask application will run (default: `8080`)
 
-## Endpoints & Parameters
+## Endpoints & Env Parameters
 
 ### http:`/startup` file:`/startup`
 
