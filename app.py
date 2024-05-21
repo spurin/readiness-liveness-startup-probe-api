@@ -96,7 +96,7 @@ def probe_handler(endpoint):
         consecutive_success[endpoint] = 0
         log_msg = f"{endpoint.capitalize()} probe failed: request_count:{call_counts[endpoint]}, consecutive_success:{consecutive_success[endpoint]}, consecutive_failures:{consecutive_failures[endpoint]}"
         logger.info(log_msg)
-        return "Error", 500
+        return "ERROR", 500
 
     if failure_threshold > 0 and call_counts[endpoint] >= failure_threshold:
         permanent_failure_activated[endpoint] = True
@@ -106,14 +106,14 @@ def probe_handler(endpoint):
         consecutive_success[endpoint] = 0
         log_msg = f"{endpoint.capitalize()} probe failed permanently after reaching threshold of {failure_threshold} calls: request_count:{call_counts[endpoint]}, consecutive_success:{consecutive_success[endpoint]}, consecutive_failures:{consecutive_failures[endpoint]}"
         logger.info(log_msg)
-        return "Error", 500
+        return "ERROR", 500
 
     if chaos_frequency > 0 and call_counts[endpoint] % chaos_frequency == 0:
         consecutive_failures[endpoint] += 1
         consecutive_success[endpoint] = 0
         log_msg = f"{endpoint.capitalize()} probe failed as per chaos frequency {chaos_frequency}: request_count:{call_counts[endpoint]}, consecutive_success:{consecutive_success[endpoint]}, consecutive_failures:{consecutive_failures[endpoint]}"
         logger.info(log_msg)
-        return "Error", 500
+        return "ERROR", 500
 
     consecutive_failures[endpoint] = 0
     consecutive_success[endpoint] += 1
