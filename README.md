@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository provides the source code used for the [spurin/readiness-liveness-startup-probe-api](https://hub.docker.com/r/spurin/readiness-liveness-startup-probe-api) container image. Designed for demonstrating, troubleshooting and understanding the use of Kubernetes Startup, Liveness, and Readiness probes. Each probe endpoint can be optionally customised with intentional delays, chaos injection and permanent failure after a specified number of calls.
+This repository provides the source code used for the [spurin/readiness-liveness-startup-probe-api](https://hub.docker.com/r/spurin/readiness-liveness-startup-probe-api) container image. Designed to provide behind the scenes information when making use of Kubernetes Startup, Liveness, and Readiness probes. Each probe endpoint can be optionally customised with intentional delays, chaos injection and permanent failure after a specified number of calls.
 
 Endpoints are accessible both via `http` and/or via `file` access (for example, by using `cat /healthz` in the running container). Successful operations return OK, failures return ERROR.
 
