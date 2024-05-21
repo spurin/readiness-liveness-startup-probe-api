@@ -58,10 +58,10 @@ livenessProbe:
 ```yaml
 livenessProbe:
   exec:
-     command:
-     - /bin/sh
-     - -c
-     - 'grep -q "OK" /healthz'
+    command:
+    - /bin/sh
+    - -c
+    - 'grep -q "OK" /healthz'
   periodSeconds: 5
   timeoutSeconds: 1
   initialDelaySeconds: 10
