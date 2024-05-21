@@ -1,16 +1,27 @@
-# Flask Probe Simulation Application
+# Readiness Liveness Startup Probe API
 
 ## Overview
 
-This repository contains a Python Flask application designed to demonstrate the use of Kubernetes probes: Startup, Liveness, and Readiness. For each probe, the application supports delays, chaos injection and permanent failure.
+This repository provides the source code used for the [spurin/readiness-liveness-startup-probe-api](https://hub.docker.com/r/spurin/readiness-liveness-startup-probe-api) container image. Designed for demonstrating, troubleshooting and understanding the use of Kubernetes Startup, Liveness, and Readiness probes. Each probe endpoint can be optionally customised with intentional delays, chaos injection and permanent failure after a specified number of calls.
 
-Endpoints can be accessed via http or via files (for example, cat /healthz). Successful operations result in OK, failures will return ERROR.
+Endpoints are accessible both via `http` and/or via `file` access (for example, by using `cat /healthz` in the running container). Successful operations return OK, failures return ERROR.
 
-Request information and status provided as logs in the running container, allowing you to see the probes being actioned from the container view.
+This container image was created as Kubernetes Startup, Liveness and Readiness probes operate in a black-box fashion. They're actioned from Kubernetes and unless a probe fails, we have no visibility whether a probe was executed and if it was successful. This container image tracks and logs all probe requests made via `http` and/or via local `file` read access. You're able to see the request that was made, whether it succeeded or failed, the request count and also the number of consecutive successes or failures.
+
+### Example container log output
+
+```
+19:45:52 - INFO - Healthz probe successful: request_count:4, consecutive_success:1, consecutive_failures:0
+19:45:52 - INFO - Ready probe successful: request_count:5, consecutive_success:3, consecutive_failures:0
+19:45:57 - INFO - Ready probe successful: request_count:6, consecutive_success:4, consecutive_failures:0
+19:45:57 - INFO - Healthz probe successful: request_count:5, consecutive_success:2, consecutive_failures:0
+19:46:02 - INFO - Ready probe successful: request_count:7, consecutive_success:5, consecutive_failures:0
+19:46:07 - INFO - Healthz probe successful: request_count:7, consecutive_success:1, consecutive_failures:0
+```
 
 ## Env Parameters
 
-- `PORT`: Port on which the Flask application will run (default: `8080`)
+- `PORT`: Port on which the application will run (default: `8080`)
 
 ## Endpoints & Env Parameters
 
@@ -70,4 +81,4 @@ livenessProbe:
 
 ## Container Image
 
-Available as a multi-arch container via Docker Hub at [spurin/readiness-liveness-startup-probe-api](https://hub.docker.com/r/spurin/readiness-liveness-startup-probe-api)
+Available as a multi-arch container via Docker Hub at [spurin/readiness-liveness-startup-probe-api](https://hub.docker.com/r/spurin/readiness-liveness-startup-probe-api) - See [Tags](https://hub.docker.com/r/spurin/readiness-liveness-startup-probe-api/tags) for all available architectures.
