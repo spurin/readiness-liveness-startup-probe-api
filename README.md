@@ -10,7 +10,7 @@ Endpoints can be accessed via http or via files (for example, cat /status/health
 
 - `PORT`: Port on which the Flask application will run (default: `8080`)
 
-## Endpoints & Parameters
+## Endpoints & Env Parameters
 
 ### http:`/startup` file:`/status/startup`
 
