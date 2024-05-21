@@ -36,6 +36,36 @@ Endpoints can be accessed via http or via files (for example, cat /status/health
   - `HEALTHZ_CHAOS_FREQUENCY`: Number of calls after which a failure is simulated (default: `0`). A value of `0` means the chaos feature is disabled.
   - `HEALTHZ_PERMANENT_FAILURE_THRESHOLD`: Number of calls after which permanent failure is activated (default: `0`). A value of `0` means this feature is disabled.
 
+## Example usage with a Liveness Probe in Kubernetes
+
+### httpGet
+
+```yaml
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: 8080
+  periodSeconds: 5
+  timeoutSeconds: 1
+  initialDelaySeconds: 10
+  failureThreshold: 15
+```
+
+### exec (file based, checking file for OK status)
+
+```yaml
+livenessProbe:
+  exec:
+     command:
+     - /bin/sh
+     - -c
+     - 'grep -q "OK" /status/healthz'
+  periodSeconds: 5
+  timeoutSeconds: 1
+  initialDelaySeconds: 10
+  failureThreshold: 15
+```
+
 ## Container Image
 
 Available as a multi-arch container via Docker Hub at [spurin/readiness-liveness-startup-probe-api](https://hub.docker.com/r/spurin/readiness-liveness-startup-probe-api)
