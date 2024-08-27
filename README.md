@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository provides the source code used for the [spurin/readiness-liveness-startup-probe-api](https://hub.docker.com/r/spurin/readiness-liveness-startup-probe-api) container image. Designed to provide behind the scenes information when making use of Kubernetes Startup, Liveness, and Readiness probes. Each probe endpoint can be optionally customised with intentional delays (during which, requests will fail), chaos injection and permanent failure after a specified number of calls.
+This repository provides the source code used for the [spurin/readiness-liveness-startup-probe-api](https://hub.docker.com/r/spurin/readiness-liveness-startup-probe-api) container image. Designed to provide behind the scenes information when making use of Kubernetes Startup, Liveness, and Readiness probes. Each probe endpoint can be optionally customised with intentional delays (during which, requests will fail), chaos injection, , timed success/failure intervals and permanent failure after a specified number of calls.
 
 Endpoints are accessible both via `http` and/or via `file` access (for example, by using `cat /healthz` in the running container). Successful operations return OK, failures return ERROR.
 
@@ -40,6 +40,8 @@ This container image was created as Kubernetes Startup, Liveness and Readiness p
   - `READY_DELAY`: Time in seconds to delay and error any readiness responses (default: `0`). A value of `0` means no intentional delay.
   - `READY_CHAOS_FREQUENCY`: Number of calls after which a failure is simulated (default: `0`). A value of `0` means the chaos feature is disabled.
   - `READY_PERMANENT_FAILURE_THRESHOLD`: Number of calls after which permanent failure is activated (default: `0`). A value of `0` means this feature is disabled.
+  - `READY_SUCCESS_INTERVAL`: Duration in seconds the readiness probe will report success before failing (default: `0`).
+  - `READY_FAILURE_INTERVAL`: Duration in seconds the readiness probe will report failure before returning to success (default: `0`).
 
 ### http:`/healthz` file:`/healthz`
 
@@ -48,6 +50,8 @@ This container image was created as Kubernetes Startup, Liveness and Readiness p
   - `HEALTHZ_DELAY`: Time in seconds to delay and error any health check responses (default: `0`). A value of `0` means no intentional delay.
   - `HEALTHZ_CHAOS_FREQUENCY`: Number of calls after which a failure is simulated (default: `0`). A value of `0` means the chaos feature is disabled.
   - `HEALTHZ_PERMANENT_FAILURE_THRESHOLD`: Number of calls after which permanent failure is activated (default: `0`). A value of `0` means this feature is disabled.
+  - `HEALTHZ_SUCCESS_INTERVAL`: Duration in seconds the health check will report success before failing (default: `0`).
+  - `HEALTHZ_FAILURE_INTERVAL`: Duration in seconds the health check will report failure before returning to success (default: `0`).
 
 ## Example usage with a Liveness Probe in Kubernetes
 

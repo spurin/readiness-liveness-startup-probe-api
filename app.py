@@ -42,6 +42,16 @@ failure_thresholds = {
     'ready': int(os.getenv("READY_PERMANENT_FAILURE_THRESHOLD", 0)),
     'healthz': int(os.getenv("HEALTHZ_PERMANENT_FAILURE_THRESHOLD", 0))
 }
+success_intervals = {
+    'startup': int(os.getenv("STARTUP_SUCCESS_INTERVAL", 0)),
+    'ready': int(os.getenv("READY_SUCCESS_INTERVAL", 0)),
+    'healthz': int(os.getenv("HEALTHZ_SUCCESS_INTERVAL", 0))
+}
+failure_intervals = {
+    'startup': int(os.getenv("STARTUP_FAILURE_INTERVAL", 0)),
+    'ready': int(os.getenv("READY_FAILURE_INTERVAL", 0)),
+    'healthz': int(os.getenv("HEALTHZ_FAILURE_INTERVAL", 0))
+}
 
 # Global flags and counters for probe readiness
 flags = {
@@ -71,7 +81,7 @@ permanent_failure_activated = {
 }
 
 # Function to simulate delays for each probe
-def simulate_delay(endpoint):
+def initialize_endpoint(endpoint):
     delay = delays[endpoint]
     logger.info(f"Simulating {endpoint.capitalize()} delay for {delay} seconds")
     time.sleep(delay)
@@ -79,11 +89,31 @@ def simulate_delay(endpoint):
     logger.info(f"{endpoint.capitalize()} delay complete")
     if endpoint == 'startup':
         # Start delays for ready and healthz after startup completes
-        threading.Thread(target=simulate_delay, args=('ready',)).start()
-        threading.Thread(target=simulate_delay, args=('healthz',)).start()
+        threading.Thread(target=initialize_endpoint, args=('ready',)).start()
+        threading.Thread(target=initialize_endpoint, args=('healthz',)).start()
+
+        # Wait for the delay of ready and healthz to complete before starting their timed modes
+        time.sleep(max(delays['ready'], delays['healthz']))
+        if success_intervals['ready'] > 0 and failure_intervals['ready'] > 0:
+            threading.Thread(target=simulate_timed_mode, args=('ready',)).start()
+        if success_intervals['healthz'] > 0 and failure_intervals['healthz'] > 0:
+            threading.Thread(target=simulate_timed_mode, args=('healthz',)).start()
 
 # Start the simulation for startup delay
-threading.Thread(target=simulate_delay, args=('startup',)).start()
+threading.Thread(target=initialize_endpoint, args=('startup',)).start()
+
+# Function to handle timed operation mode
+def simulate_timed_mode(endpoint):
+    while True:
+        # Log the success phase
+        logger.info(f"{endpoint.capitalize()} will operate successfully for {success_intervals[endpoint]} seconds")
+        flags[endpoint] = True
+        time.sleep(success_intervals[endpoint])
+
+        # Log the failure phase
+        logger.info(f"{endpoint.capitalize()} will fail for {failure_intervals[endpoint]} seconds")
+        flags[endpoint] = False
+        time.sleep(failure_intervals[endpoint])
 
 # Probe handler function for generic use
 def probe_handler(endpoint):
