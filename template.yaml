@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: probe-demo
+spec:
+  containers:
+  - name: probe-demo
+
+    image: spurin/readiness-liveness-startup-probe-api:latest
+
+    env:
+    - name: STARTUP_DELAY
+      value: "30"   # Sets a 30-second delay for Startup simulation, before Startup probe /startup is available
+
+    - name: READY_DELAY
+      value: "10"   # Sets a 10-second delay for Ready simulation, before Readiness probe /ready is available
+
+    - name: HEALTHZ_CHAOS_FREQUENCY
+      value: "3"    # Liveness probe /healthz will fail every 3rd call
+
+    - name: HEALTHZ_PERMANENT_FAILURE_THRESHOLD
+      value: "10"   # Liveness probe /healthz will permanently fail after 10 calls
+
+    - name: PORT
+      value: "8080" # Default port is 8080, can be overridden
+
+    startupProbe:
+      # Examples with http or file, uncomment as desired
+      #httpGet:
+      #  path: /startup
+      #  port: 8080
+      #exec:
+      #   command:
+      #   - /bin/sh
+      #   - -c
+      #   - 'grep -q "OK" /startup'
+      periodSeconds: 5
+      timeoutSeconds: 1
+      failureThreshold: 8  # Allows up to 40 seconds for startup
+
+    livenessProbe:
+      # Examples with http or file, uncomment as desired
+      #httpGet:
+      #  path: /healthz
+      #  port: 8080
+      #exec:
+      #   command:
+      #   - /bin/sh
+      #   - -c
+      #   - 'grep -q "OK" /healthz'
+      periodSeconds: 5
+      timeoutSeconds: 1
+      initialDelaySeconds: 10 # Delay for 10 seconds before checking for liveness
+      failureThreshold: 15    # Allows up to 15 consecutive failures before it is considered unhealthy
+
+    readinessProbe:
+      # Examples with http or file, uncomment as desired
+      #httpGet:
+      #  path: /ready
+      #  port: 8080
+      #exec:
+      #   command:
+      #   - /bin/sh
+      #   - -c
+      #   - 'grep -q "OK" /ready'
+      periodSeconds: 5
+      timeoutSeconds: 1

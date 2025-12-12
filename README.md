@@ -2,11 +2,13 @@
 
 ## Overview
 
-This repository provides the source code used for the [spurin/readiness-liveness-startup-probe-api](https://hub.docker.com/r/spurin/readiness-liveness-startup-probe-api) container image. Designed to provide behind the scenes information when making use of Kubernetes Startup, Liveness, and Readiness probes. Each probe endpoint can be optionally customised with intentional delays (during which, requests will fail), chaos injection, , timed success/failure intervals and permanent failure after a specified number of calls.
+This repository provides the source code used for the [spurin/readiness-liveness-startup-probe-api](https://hub.docker.com/r/spurin/readiness-liveness-startup-probe-api) container image. Designed to provide behind the scenes information when making use of Kubernetes Startup, Liveness, and Readiness probes. Each probe endpoint can be optionally customised with intentional delays (during which, requests will fail), chaos injection, timed success/failure intervals and permanent failure after a specified number of calls.
 
 Endpoints are accessible both via `http` and/or via `file` access (for example, by using `cat /healthz` in the running container). Successful operations return OK, failures return ERROR.
 
 This container image was created as Kubernetes Startup, Liveness and Readiness probes operate in a black-box fashion. They're actioned from Kubernetes and unless a probe fails, we have no visibility whether a probe was executed and if it was successful. This container image tracks and logs all probe requests made via `http` and/or via local `file` read access. You're able to see the request that was made, whether it succeeded or failed, the request count and also the number of consecutive successes or failures.
+
+See [template.yaml](template.yaml) for a working example.
 
 ### Example container log output
 
